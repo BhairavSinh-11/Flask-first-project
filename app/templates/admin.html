@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — ADMIN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body style="margin:0;font-family:Segoe UI, Roboto, Arial, sans-serif;background:#f5f7fb;color:#ffffff;">
+
+  <!-- Background Image -->
+  <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(18,18,18,0.85),rgba(18,18,18,0.9)),url('{{ url_for("static", filename="img/banner.jpg") }}') center/cover no-repeat;z-index:-1;"></div>
+
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;">
+    
+    <main style="width:100%;max-width:420px;background:rgba(30,30,30,0.9);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.4);padding:28px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);">
+      
+        <h2 style="margin:0 0 8px;font-size:20px;color:#6c63ff;text-align:center;">Admin Login</h2>
+      
+      <p style="margin:0 0 18px;color:#b0b0b0;font-size:13px;text-align:center;">Enter admin credentials to continue</p>
+
+      <form action="/admin" method="POST" style="display:flex;flex-direction:column;gap:12px;" autocomplete="off">
+        
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
+        <!-- Flash message -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="padding:10px;border-radius:8px;font-size:14px;margin-bottom:10px;background:rgba(220,53,69,0.2);color:#f8d7da;border:1px solid rgba(220,53,69,0.3);">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <label for="admin_username" style="font-size:13px;color:#b0b0b0;">Admin Username</label>
+        <input type="text" id="admin_username" name="admin_username" required
+               style="width:100%;padding:10px 12px;background:rgba(37,37,37,0.8);border:1px solid #333333;border-radius:8px;font-size:14px;color:#ffffff;box-sizing:border-box;outline:none;transition:all 0.3s;"
+               onfocus="this.style.boxShadow='0 4px 10px rgba(108,99,255,0.2)';this.style.borderColor='#6c63ff';"
+               onblur="this.style.boxShadow='none';this.style.borderColor='#333333';"
+               placeholder="">
+
+         <div class="input-group">
+    
+        <label for="admin_password" style="font-size:13px;color:#b0b0b0;margin-top:6px;">PASSWORD</label>
+
+        <div class="password-wrapper" style="position:relative;display:flex;align-items:center; top: 10px;"> 
+
+
+        <input type="password" id="admin_password" name="admin_password" required
+               style="width:100%;padding:10px 12px;background:rgba(37,37,37,0.8);border:1px solid #333333;border-radius:8px;font-size:14px;color:#ffffff;box-sizing:border-box;outline:none;transition:all 0.3s;"
+               onfocus="this.style.boxShadow='0 4px 10px rgba(108,99,255,0.2)';this.style.borderColor='#6c63ff';"
+               onblur="this.style.boxShadow='none';this.style.borderColor='#333333';"
+               placeholder="">
+
+           <i style="position: absolute; right: 10px;
+                 top: 50;"class="fa-solid fa-eye" id="togglePassword"></i>
+        </div>
+        </div>
+
+        <button type="submit"
+                style="margin-top:6px;background:#6c63ff;color:#fff;padding:10px 12px;border-radius:8px;border:0;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(108,99,255,0.2);transition:all 0.3s;"
+                onmouseover="this.style.background='#5752d4';this.style.transform='translateY(-1px)';"
+                onmouseout="this.style.background='#6c63ff';this.style.transform='translateY(0)';"> 
+          LOG IN       
+        </button>
+      </form>
+
+      <p style="margin:14px 0 0;font-size:13px;color:#b0b0b0;text-align:center;">
+        <a href="/" style="color:#6c63ff;text-decoration:none;font-weight:600;">BACK to Home</a>
+      </p>
+    </main>
+  </div>
+
+        <!-- for toggle password visibility -->
+
+<script>
+    const toggle = document.getElementById('togglePassword');
+    const password = document.getElementById('admin_password');
+
+    toggle.addEventListener('click', () => {
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      toggle.classList.toggle('fa-eye');
+      toggle.classList.toggle('fa-eye-slash');
+    });
+  </script>
+
+</body>
+</html>

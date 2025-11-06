@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — FDATABASE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(rgba(18, 18, 18, 0.85), rgba(18, 18, 18, 0.9)), 
+                      url("{{ url_for('static', filename='img/banner.jpg') }}") 
+                        no-repeat center center/cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+            padding: 28px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            color: #6c63ff;
+            text-align: center;
+        }
+
+        .subtitle {
+            margin: 0 0 18px;
+            color: #b0b0b0;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        label {
+            font-size: 13px;
+            color: #b0b0b0;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(37, 37, 37, 0.8);
+            border: 1px solid #333333;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #ffffff;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.2);
+            border-color: #6c63ff;
+        }
+
+        input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            accent-color: #6c63ff;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #b0b0b0;
+        }
+
+        .forgot-link {
+            font-size: 13px;
+            color: #6c63ff;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            margin-top: 6px;
+            background: #6c63ff;
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 0;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 22px rgba(108, 99, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #5752d4;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
+        }
+
+        .register-link {
+            margin: 14px 0 0;
+            font-size: 13px;
+            color: #9aa4b2;
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #6c63ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.2);
+            color: #f8d7da;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.2);
+            color: #d4edda;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h2>Sign in to FDATABASE</h2>
+        <p class="subtitle">Enter your credentials to continue</p>
+
+        <form action="/login" method="POST" autocomplete="off">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <!-- Flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required placeholder="your username">
+
+            <div class="input-group">
+        <label for="password">PASSWORD</label>
+        <div class="password-wrapper" style="position:relative;display:flex;align-items:center; top: 10px;"> 
+
+        <input style="width: 100%;
+  padding-right: 40px;"  id="password" name="password" type="password" required placeholder="your password">
+
+        <i style="position: absolute; right: 10px;
+  top: 50;"class="fa-solid fa-eye" id="togglePassword"></i>
+        </div>
+        </div>
+
+            <div class="form-options">
+            
+                <a href="/forgotpass" class="forgot-link">Forgot password ?</a>
+            </div>
+
+            <button type="submit">Sign in</button>
+        </form>
+
+        <p class="register-link">
+            New here?
+            <a href="/register">Create an account</a>
+        </p>
+        <p class="register-link">
+            <a href="/">HOME PAGE</a>
+        </p>
+
+
+    </div>
+
+            
+            <!-- for toggle password visibility -->
+    
+    <script>
+
+    const toggle = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+
+    toggle.addEventListener('click', () => {
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      toggle.classList.toggle('fa-eye');
+      toggle.classList.toggle('fa-eye-slash');
+    });
+  </script>
+
+</body>
+</html>
